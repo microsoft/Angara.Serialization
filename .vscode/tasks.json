@@ -1,0 +1,11 @@
+{
+	"command": "grunt",
+	"isShellCommand": true,
+	"tasks": [
+	 	{
+	 		"taskName": "default",
+	 		// Make this the default build command.
+	 		"isBuildCommand": true
+	 	}
+	]
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Angara.SerializationJS",
+    "version": "0.1.0",
+    "authors": [ "Microsoft Research" ],
+    "private": false,
+    "description": "Implementations of InfoSet data structure and JSON with type information for JavaScript environments",
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "bower_components",
+        "node_modules",
+        "sln",
+        "src",
+        "test",
+        "Samples",
+        "Gruntfile.js",
+        "package.json",
+        "tsd.json",
+        "_SpecRunner.html",
+        "tsd.json"
+    ],
+    "devDependencies": {
+        "jasmine": "~2.3.4"
+    }
+}
