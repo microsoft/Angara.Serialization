@@ -9,7 +9,7 @@ module internal Const =
     let Version = "0.1.0" // Assembly semantic version
 
 [<assembly: AssemblyTitle("Angara.Serialization")>]
-[<assembly: AssemblyDescription("A framework for conversion of CLR objects to and from special data type called InfoSet suitable for persistence and transport.")>]
+[<assembly: AssemblyDescription("A framework to serialize and deserialize objects into and from a special InfoSet type, which facilitates further persistence or transport")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("Microsoft Research")>]
 [<assembly: AssemblyProduct("Angara")>]

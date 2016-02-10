@@ -9,7 +9,8 @@ module internal Const =
     let Version = "0.1.0" // Assembly semantic version
 
 [<assembly: AssemblyTitle("Angara.Serialization.Json")>]
-[<assembly: AssemblyDescription("Methods for exact conversions between InfoSets and JSON preserving type information.")>]
+[<assembly: AssemblyDescription("Contains converters of InfoSets into and from JSON representation with type information preserved. " +
+                                "Together with Angara.Serialization provides full framework for JSON serialization of arbitrary objects.")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("Microsoft Research")>]
 [<assembly: AssemblyProduct("Angara")>]
