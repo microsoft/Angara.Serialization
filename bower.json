@@ -1,5 +1,6 @@
 {
     "name": "Angara.SerializationJS",
+    "main": [ "./dist/Angara.Serialization.umd.js" ],
     "version": "0.1.1",
     "authors": [ "Microsoft Research" ],
     "private": false,
@@ -12,11 +13,14 @@
         "sln",
         "src",
         "test",
+        "publish",
         "Gruntfile.js",
         "package.json",
+        "LICENSE",
+        "NuGet.Config",
         "tsd.json",
-        "_SpecRunner.html",
-        "tsd.json"
+        "SetVersion.js",
+        "README.md"
     ],
     "devDependencies": {
         "jasmine": "~2.3.4"
