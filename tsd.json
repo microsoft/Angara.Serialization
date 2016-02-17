@@ -5,7 +5,7 @@
   "path": "typings",
   "installed": {
     "jasmine/jasmine.d.ts": {
-      "commit": "1a5b2a729d35b1d41e2d15818db013a3644c6ba4"
+      "commit": "aefd8146158b9f17c9eb79bbf158e6d8d3c2a87b"
     }
   }
 }

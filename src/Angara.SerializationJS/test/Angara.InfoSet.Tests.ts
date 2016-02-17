@@ -24,22 +24,7 @@ describe("Angara.InfoSet", () => {
         expect(JSON.stringify(c_json)).toEqual(JSON.stringify(s_json));
     });
 
-    it("generates server-compatible JSON for arrays", () => {
-        var c_json = a.InfoSet.Marshal(a.InfoSet.EmptyMap
-            .AddIntArray("ia", [20, 30])
-            .AddBoolArray("ba", [true, false])
-            .AddDoubleArray("da", [1e-12, 1e+20, 3.1415, 2.87])
-            .AddDateTimeArray("datea", [new Date("2015-10-08"), new Date("2014-08-15")])
-            .AddStringArray("sa", ["hello", "world", "!"]));
-        var s_json = {
-            "ia:int array": "FAAAAB4AAAA=",
-            "ba:bool array": "AQA=",
-            "da:double array": "EeotgZmXcT1AjLV4Ha8VRG8Sg8DKIQlA9ihcj8L1BkA=",
-            "datea:datetime array": "AAAA9UsEdUIAAMBrb310Qg==",//???
-            "sa": ["hello", "world", "!"]
-        };
-        expect(JSON.stringify(c_json)).toEqual(JSON.stringify(s_json));
-    });
+    
 
    it("restores server-compatible JSON for arrays", () => {
         var da = [1e-12, 1e+20, 3.1415, 2.87];
@@ -86,15 +71,7 @@ describe("Angara.InfoSet", () => {
         var ia = seq[1].ToIntArray();
         expect(ia.length).toBe(51);
     })
-
-    it("generates server-compatible JSON for seq ", () => {
-        var da = [a.InfoSet.Int(10), a.InfoSet.String("hello"), a.InfoSet.DoubleArray([10.3, 5])];
-        var c_json = a.InfoSet.Marshal(a.InfoSet.EmptyMap
-            .AddSeq("s", da));
-        var s_json = { "s:array": { "0:int":10, "1":"hello", "2:double array":"mpmZmZmZJEAAAAAAAAAUQA=="}};
-        expect(JSON.stringify(c_json)).toEqual(JSON.stringify(s_json));
-    });
-
+ 
     it("roundtrips integer values", () => {
         var infoSet = a.InfoSet.Unmarshal(a.InfoSet.Marshal(a.InfoSet.Int(10)));
         expect(infoSet.IsInt).toBeTruthy();
@@ -217,7 +194,8 @@ describe("Angara.InfoSet", () => {
 
     it("roundtrips Seq values", () => {
         var da = [a.InfoSet.String("hello"), a.InfoSet.BoolArray([true, false]), a.InfoSet.Int(10)];
-        var infoSet = a.InfoSet.Unmarshal(a.InfoSet.Marshal(a.InfoSet.Seq(da)));
+        var json = a.InfoSet.Marshal(a.InfoSet.Seq(da));
+        var infoSet = a.InfoSet.Unmarshal(json);
         expect(infoSet.IsSeq).toBeTruthy();
         var arr = infoSet.ToSeq();
         expect(arr[0]).toEqual(da[0]);

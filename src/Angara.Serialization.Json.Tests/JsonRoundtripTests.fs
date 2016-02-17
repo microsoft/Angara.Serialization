@@ -5,25 +5,25 @@ open Angara.Serialization
 open Swensen.Unquote
 open System
 
-open Angara.Serialization.Json
+open Angara.Serialization
 
 let equalSeq<'U when 'U : comparison> (s1 : 'U seq) (s2 : 'U seq) =
     Seq.zip s1 s2 |> Seq.forall (fun (e1,e2) -> e1 = e2)
 
 let shouldRoundtrip (i : InfoSet) =
-    let json = Marshal(i, None)
+    let json = Json.Marshal(i, None)
     let s = json.ToString(Newtonsoft.Json.Formatting.Indented)
     printfn "%s" s
     let json' = Newtonsoft.Json.Linq.JToken.Parse(s)
-    let i' = Unmarshal(json', None)
+    let i' = Json.Unmarshal(json', None)
     i =? i'
 
 let shouldSatisfy (p: InfoSet -> bool) (i : InfoSet) =
-    let json = Marshal(i, None)
+    let json = Json.Marshal(i, None)
     let s = json.ToString(Newtonsoft.Json.Formatting.Indented)
     printfn "%s" s
     let json' = Newtonsoft.Json.Linq.JToken.Parse(s)
-    let i' = Unmarshal(json', None)
+    let i' = Json.Unmarshal(json', None)
     Assert.IsTrue(p i')
 
 [<Test>]
@@ -69,7 +69,7 @@ let ``Primitive InfoSets roundtrip to JSON`` () =
     InfoSet.DateTime(DateTime.MaxValue) |> shouldRoundtrip
 
     // Guid
-    let guid = Guid("D5A1A767-DCE9-4C1D-B946-D1970F2A153B")
+    let guid = System.Guid("D5A1A767-DCE9-4C1D-B946-D1970F2A153B")
     InfoSet.Guid(guid) |> shouldRoundtrip
 
     // String
@@ -209,10 +209,10 @@ let ``Array of arrays roundtrips to JSON``() =
                                InfoSet.DoubleArray(id); 
                                InfoSet.DateTimeArray(idt) ] |> Seq.ofList)
      
-    let json = Marshal(arrays, None)
+    let json = Json.Marshal(arrays, None)
     System.Diagnostics.Trace.WriteLine("Array of arrays in JSON format")
     System.Diagnostics.Trace.WriteLine(json.ToString())
-    let si2 = Unmarshal(json, None)
+    let si2 = Json.Unmarshal(json, None)
 
     match si2 with
     | Seq(s) ->

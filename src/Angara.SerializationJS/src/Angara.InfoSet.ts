@@ -80,6 +80,8 @@
             this.v = v;
         }  
 
+        public get Type() { return this.t; }
+
         public static get EmptyMap() { return new InfoSet(InfoSetType.Map, {}); }
 
         public AddInfoSet(p: string, i: InfoSet) {
@@ -288,16 +290,7 @@
                 return [Base64.Encode(typeof i.v == "Float64Array" ? i.v : new Float64Array(arr)), "datetime array"];
             } else if (i.IsSeq) {
                 var seq = <InfoSet[]>i.v;
-                if (seq.length > 0) {
-                    var res = {};
-                    for (var idx = 0; idx < seq.length; idx++) {
-                        var encoded = InfoSet.Encode(seq[idx]);
-                        var key = InfoSet.EncodeNameAndType(idx.toString(), encoded[1]);
-                        res[key] = encoded[0];
-                    }
-                    return [res, "array"];
-                } else
-                    return [[], null];
+                return [seq.map(i => InfoSet.Marshal(i)),null]
             } else if (i.IsMap) {
                 var res = {};
                 for (var p in i.v) {
@@ -379,14 +372,10 @@
             } else if (typeId == "double array")
                 return InfoSet.DoubleArray(new Float64Array(Base64.Decode(json).buffer));
             else if (typeId == "array") {
-                var a = new Array<InfoSet>();
-                for (var p in json) {
-                    var nameType = InfoSet.DecodeNameAndType(p);
-                    var index = parseInt(nameType[0]);
-                    if (index == NaN)
-                        throw new Error("Error decoding sequence. Cannot parse " + nameType[0] + " as integer");
-                    a[index] = InfoSet.Decode([json[p], nameType[1]]);
-                }
+                var length = json.length;
+                var a = new Array<InfoSet>(length);
+                for (var i = 0;i<length;i++) 
+                    a[i] = InfoSet.Unmarshal(json[i]);
                 return InfoSet.Seq(a);
             } else if (typeId != null) {
                 var typeEnd = typeId.split(" ");

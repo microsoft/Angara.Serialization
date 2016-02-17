@@ -6,7 +6,7 @@ open System.Runtime.InteropServices
 
 module internal Const =
     [<Literal>]
-    let Version = "0.1.1" // Assembly semantic version
+    let Version = "0.1.2" // Assembly semantic version
 
 [<assembly: AssemblyTitle("Angara.Serialization.Json")>]
 [<assembly: AssemblyDescription("Contains converters of InfoSets into and from JSON representation with type information preserved. " +
