@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Angara.Serialization</RootNamespace>
     <AssemblyName>Angara.Serialization</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>Angara.Serialization</Name>
@@ -57,10 +57,9 @@
     <Compile Include="TypeId.fs" />
     <Compile Include="ArtefactSerializer.fs" />
     <Compile Include="Helpers.fs" />
-    <Compile Include="SerializerLibrary.fs" />
     <Compile Include="CoreSerializerResolver.fs" />
     <Compile Include="CompositeSerializerResolver.fs" />
-    <Compile Include="CustomResolver.fs" />
+    <Compile Include="SerializerLibrary.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

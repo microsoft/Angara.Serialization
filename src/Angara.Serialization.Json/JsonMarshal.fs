@@ -255,5 +255,5 @@ type Json private () =
     static member FromObject (resolver, a) = Json.Marshal(ArtefactSerializer.Serialize resolver a, None)
     static member FromObject (resolver, a, writer) = Json.Marshal(ArtefactSerializer.Serialize resolver a, Some(writer))
 
-    static member ToObject<'t> (json, resolver) = ArtefactSerializer.Deserialize resolver (Json.Unmarshal(json, None))
-    static member ToObject<'t> (json, resolver, reader) = ArtefactSerializer.Deserialize resolver (Json.Unmarshal(json, Some(reader)))
+    static member ToObject<'t> (json, resolver) = ArtefactSerializer.Deserialize resolver (Json.Unmarshal(json, None)) :?> 't
+    static member ToObject<'t> (json, resolver, reader) = ArtefactSerializer.Deserialize resolver (Json.Unmarshal(json, Some(reader))) :?> 't

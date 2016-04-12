@@ -71,7 +71,7 @@ let ``Null is serialized``() =
     checkCoreRT null
 
 let buildCustomLib () = 
-    let lib = SerializerLibrary()
+    let lib = SerializerLibrary.CreateEmpty()
     lib.Register(Vector2dSerializer())
     SerializerCompositeResolver([ lib; CoreSerializerResolver.Instance ])
 

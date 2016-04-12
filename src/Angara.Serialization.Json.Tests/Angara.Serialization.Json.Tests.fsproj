@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Angara.Json.Tests</RootNamespace>
     <AssemblyName>Angara.Json.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>Angara.Json.Tests</Name>

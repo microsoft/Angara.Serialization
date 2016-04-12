@@ -5,16 +5,16 @@ open NUnit.Framework
 
 open Common
 
-let Register2(s : SerializerLibrary seq) =
+let Register2(s : ISerializerLibrary seq) =
     s |> Seq.iter(fun lib -> lib.Register(Vector2dSerializer()))
 
-let Register23(s : SerializerLibrary seq) =
+let Register23(s : ISerializerLibrary seq) =
     s |> Seq.iter(fun lib -> lib.Register(Vector2dSerializer())
                              lib.Register(Vector3dSerializer()))
 
 [<Test; Category("CI")>]
 let ``Library records registrar functions`` () =
-    let lib = SerializerLibrary()
+    let lib = SerializerLibrary.CreateEmpty()
     Register2 [ lib ] // Adds registrar information
     lib.Register(Vector3dSerializer()) // No registrar information is found
     let regs = lib.GetRegistrars()
@@ -23,7 +23,7 @@ let ``Library records registrar functions`` () =
 
 [<Test; Category("CI")>]
 let ``Library returns  array of unique registars`` () =
-    let lib = SerializerLibrary()
+    let lib = SerializerLibrary.CreateEmpty()
     Register23 [ lib ] // Adds registrar information
     let regs = lib.GetRegistrars()
     Assert.AreEqual(1, regs.Length)
