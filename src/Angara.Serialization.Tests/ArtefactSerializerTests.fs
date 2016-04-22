@@ -72,7 +72,7 @@ let ``Null is serialized``() =
 
 let buildCustomLib () = 
     let lib = SerializerLibrary.CreateEmpty()
-    lib.Register(Vector2dSerializer())
+    lib.Register("v2d", SerializeVector2d, DeserializeVector2d)
     SerializerCompositeResolver([ lib; CoreSerializerResolver.Instance ])
 
 [<FsCheck.NUnit.PropertyAttribute(Verbose=true); Category("CI")>]

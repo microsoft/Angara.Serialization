@@ -6,10 +6,6 @@ type ISerializer<'T> =
     abstract member Serialize : ISerializerResolver -> 'T -> InfoSet
     abstract member Deserialize : ISerializerResolver -> InfoSet -> 'T
 
-[<Interface>]
-type ITransientSerializer<'T> = 
-    abstract member TypeId : string
-
 module Helpers =
     open System
 
