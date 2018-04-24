@@ -13,7 +13,7 @@ module internal Const =
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("Microsoft Research")>]
 [<assembly: AssemblyProduct("Angara")>]
-[<assembly: AssemblyCopyright("Copyright (c) 2016 Microsoft Corporation")>]
+[<assembly: AssemblyCopyright("Copyright (c) 2018 Microsoft Corporation")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
