@@ -2,7 +2,7 @@
     "name": "Angara.SerializationJS",
     "main": [ "./dist/Angara.Serialization.umd.js" ],
     "moduleType": "amd",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "authors": [ "Microsoft Research" ],
     "private": false,
     "description": "Serialization and deserialization into and from JSON format with type information preserved",

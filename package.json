@@ -1,6 +1,6 @@
 {
   "name": "angara.serializationjs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "private": true,
   "devDependencies": {
@@ -10,8 +10,8 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-jasmine": "^1.0.0",
+    "grunt-replace": "^0.11.0",
     "grunt-ts": "^5.2.0",
-    "grunt-tsd": "^0.2.0-beta.1",
-    "grunt-replace": "0.11.0"
+    "grunt-tsd": "^0.2.0-beta.1"
   }
 }

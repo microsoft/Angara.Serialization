@@ -6,7 +6,7 @@ open System.Runtime.InteropServices
 
 module internal Const =
     [<Literal>]
-    let Version = "0.2.1" // Assembly semantic version
+    let Version = "0.3.0" // Assembly semantic version
 
 [<assembly: AssemblyTitle("Angara.Serialization")>]
 [<assembly: AssemblyDescription("A framework to serialize and deserialize objects into and from a special InfoSet type, which facilitates further persistence or transport")>]
