@@ -69,22 +69,18 @@ module internal Utils =
         else name.Replace("::", ":"), None
 
     let UnixEpochOrigin = DateTime(1970,1,1,0,0,0, DateTimeKind.Utc)
-    let DateTimeMinUtc = DateTime.MinValue.ToUniversalTime()
-    let DateTimeMaxUtc = DateTime.MaxValue.ToUniversalTime()
+    let UnixEpochMin = DateTime.MinValue.Subtract(UnixEpochOrigin).TotalMilliseconds
+    let UnixEpochMax = DateTime.MaxValue.Subtract(UnixEpochOrigin).TotalMilliseconds
 
     /// Returns the number of milliseconds since 1 Jan 1970 00:00:00 UTC (Unix Epoch)
     let DateTimeToUnixEpoch (dt:DateTime) : float =
-        let udt = if dt = DateTime.MinValue then DateTimeMinUtc
-                  elif dt = DateTime.MaxValue then DateTimeMaxUtc 
-                  else dt.ToUniversalTime()
-        udt.Subtract(UnixEpochOrigin).TotalMilliseconds
+        dt.ToUniversalTime().Subtract(UnixEpochOrigin).TotalMilliseconds
 
     /// Returns the DateTime instance (local time) from number of milliseconds since 1 Jan 1970 00:00:00 UTC (Unix Epoch)
     let UnixEpochToDateTime (value: float) : DateTime =
-        let udt = UnixEpochOrigin.AddMilliseconds(value)
-        if udt = DateTimeMinUtc then DateTime.MinValue
-        elif udt = DateTimeMaxUtc then DateTime.MaxValue
-        else udt.ToLocalTime()
+        if value <= UnixEpochMin then DateTime.MinValue
+        elif value >= UnixEpochMax then DateTime.MaxValue
+        else UnixEpochOrigin.AddMilliseconds(value).ToLocalTime()
 
 type Json private () =
     

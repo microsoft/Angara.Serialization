@@ -4,10 +4,6 @@
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
-  <!-- <ItemGroup>
-    <Compile Include="UnitTest1.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup> -->
   <ItemGroup>
     <Compile Include="NUnitRunner.fs" />
     <Compile Include="Common.fs" />

@@ -16,7 +16,7 @@ let shouldRoundtrip (i : InfoSet) =
     printfn "%s" s
     let json' = Newtonsoft.Json.Linq.JToken.Parse(s)
     let i' = Json.Unmarshal(json', None)
-    i =? i'
+    i =! i'
 
 let shouldSatisfy (p: InfoSet -> bool) (i : InfoSet) =
     let json = Json.Marshal(i, None)
@@ -175,17 +175,17 @@ let ``Array InfoSets roundtrip to JSON`` () =
                                                  | InfoSet.DateTimeArray(s) -> equalSeq s dta
                                                  | _ -> false)
 
-let internal TestBlobContent = [| 0uy; 0xA0uy; 0xFFuy |]
 
-type internal TestBlob () = 
+type internal TestBlob (TestBlobContent) = 
     interface IBlob with
         member x.WriteTo stream = stream.Write(TestBlobContent, 0, TestBlobContent.Length)
         member x.GetStream() = upcast new System.IO.MemoryStream(TestBlobContent, false)
         
 [<Test>]
 let ``Blob and namespace rountrip to JSON (inlined)`` () = 
+    let TestBlobContent = [| 0uy; 0xA0uy; 0xFFuy |]
     let ns = ["nested"; "namespaces"]
-    let is = InfoSet.Namespace(ns, InfoSet.Blob("bin", TestBlob()))
+    let is = InfoSet.Namespace(ns, InfoSet.Blob("bin", TestBlob(TestBlobContent)))
     is |> shouldSatisfy (function 
                          | InfoSet.Namespace(n, InfoSet.Blob("bin", b)) -> let buffer = Array.zeroCreate<byte> 3
                                                                            use reader = new System.IO.BinaryReader(b.GetStream())
@@ -218,18 +218,18 @@ let ``Array of arrays roundtrips to JSON``() =
     | Seq(s) ->
         let a = s |> Array.ofSeq
         match a.[0] with
-        | InfoSet.IntArray(r) -> r |> Array.ofSeq =? ia    
+        | InfoSet.IntArray(r) -> r |> Array.ofSeq =! ia    
         | _ -> Assert.Fail("IntArray expected")
         match a.[1] with
-        | InfoSet.BoolArray(r) -> r |> Array.ofSeq =? ib    
+        | InfoSet.BoolArray(r) -> r |> Array.ofSeq =! ib    
         | _ -> Assert.Fail("BoolArray expected")
         match a.[2] with
-        | InfoSet.StringArray(r) -> r |> Array.ofSeq =? is
+        | InfoSet.StringArray(r) -> r |> Array.ofSeq =! is
         | _ -> Assert.Fail("StringArray expected")
         match a.[3] with
-        | InfoSet.DoubleArray(r) -> r |> Array.ofSeq =? id    
+        | InfoSet.DoubleArray(r) -> r |> Array.ofSeq =! id    
         | _ -> Assert.Fail("DoubleArray expected")
         match a.[4] with
-        | InfoSet.DateTimeArray(r) -> r |> Array.ofSeq =? idt    
+        | InfoSet.DateTimeArray(r) -> r |> Array.ofSeq =! idt    
         | _ -> Assert.Fail("DateTimeArray expected")
     | _ -> Assert.Fail "InfoSet.Seq expected"
