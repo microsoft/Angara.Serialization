@@ -1,11 +1,8 @@
-﻿/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../../dist/Angara.Serialization.d.ts"/>
-
-import a = Angara;
+﻿import { Angara as a } from "./Angara.InfoSet";
 
 describe("Angara.InfoSet", () => {
 
-    it("generates server-compatible JSON for primitives",() => {
+    it("generates server-compatible JSON for primitives", () => {
         var c_json = a.InfoSet.Marshal(a.InfoSet.EmptyMap
             .AddInt("i", 20)
             .AddString("s", "Hello!")
@@ -24,9 +21,9 @@ describe("Angara.InfoSet", () => {
         expect(JSON.stringify(c_json)).toEqual(JSON.stringify(s_json));
     });
 
-    
 
-   it("restores server-compatible JSON for arrays", () => {
+
+    it("restores server-compatible JSON for arrays", () => {
         var da = [1e-12, 1e+20, 3.1415, 2.87];
         var ia = [20, 30];
         var c_json = a.InfoSet.Marshal(a.InfoSet.EmptyMap
@@ -47,14 +44,14 @@ describe("Angara.InfoSet", () => {
         var m = infoSet.ToMap();
         var ia2 = m["ia"].ToIntArray();
         expect(ia2.length).toBe(ia.length);
-        for(var i  = 0;i<ia.length;i++)
-            expect(ia2[i]).toEqual(ia[i]);        
+        for (var i = 0; i < ia.length; i++)
+            expect(ia2[i]).toEqual(ia[i]);
         var da2 = m["da"].ToDoubleArray();
         expect(da2.length).toBe(da.length);
-        for(var i = 0;i<da.length;i++) 
+        for (var i = 0; i < da.length; i++)
             expect(da2[i]).toEqual(da[i]);
     });
-    
+
     it("restores numeric arrays with proper length", () => {
         var json = [
             {
@@ -62,7 +59,7 @@ describe("Angara.InfoSet", () => {
             },
             {
                 ":int array": "AAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAALAAAADAAAAA0AAAAOAAAADwAAABAAAAARAAAAEgAAABMAAAAUAAAAFQAAABYAAAAXAAAAGAAAABkAAAAaAAAAGwAAABwAAAAdAAAAHgAAAB8AAAAgAAAAIQAAACIAAAAjAAAAJAAAACUAAAAmAAAAJwAAACgAAAApAAAAKgAAACsAAAAsAAAALQAAAC4AAAAvAAAAMAAAADEAAAAyAAAA"
-            }         
+            }
         ];
         var infoSet = a.InfoSet.Unmarshal(json);
         var seq = infoSet.ToSeq();
@@ -71,7 +68,7 @@ describe("Angara.InfoSet", () => {
         var ia = seq[1].ToIntArray();
         expect(ia.length).toBe(51);
     })
- 
+
     it("roundtrips integer values", () => {
         var infoSet = a.InfoSet.Unmarshal(a.InfoSet.Marshal(a.InfoSet.Int(10)));
         expect(infoSet.IsInt).toBeTruthy();
@@ -128,7 +125,7 @@ describe("Angara.InfoSet", () => {
     });
 
     it("roundtrips Date values", () => {
-        var d = new Date(2015,10,8,16,30,45,0);
+        var d = new Date(2015, 10, 8, 16, 30, 45, 0);
         var infoSet = a.InfoSet.Unmarshal(a.InfoSet.Marshal(a.InfoSet.DateTime(d)));
         expect(infoSet.IsDateTime).toBeTruthy();
         expect(infoSet.ToDateTime()).toEqual(d);
@@ -145,12 +142,12 @@ describe("Angara.InfoSet", () => {
 
     it("roundtrips int arrays", () => {
         var ia = new Array<number>(51);
-        for(var i = 0;i<51;i++)
+        for (var i = 0; i < 51; i++)
             ia[i] = i;
         var infoSet = a.InfoSet.Unmarshal(a.InfoSet.Marshal(a.InfoSet.IntArray(ia)));
         expect(infoSet.IsIntArray).toBeTruthy();
         var arr = infoSet.ToIntArray();
-        for(var i = 0;i<51;i++)
+        for (var i = 0; i < 51; i++)
             expect(arr[i]).toBe(ia[i]);
     });
 
@@ -161,7 +158,7 @@ describe("Angara.InfoSet", () => {
         expect(infoSet.IsDoubleArray).toBeTruthy();
         var arr2 = infoSet.ToDoubleArray();
         expect(arr2.length).toBe(arr.length);
-        for(var i = 0;i<arr2.length;i++)
+        for (var i = 0; i < arr2.length; i++)
             expect(arr2[i]).toEqual(arr[i]);
     });
 
@@ -180,7 +177,7 @@ describe("Angara.InfoSet", () => {
         var infoSet2 = a.InfoSet.Unmarshal(json);
         expect(infoSet2.IsStringArray).toBeTruthy();
         expect(infoSet2.ToStringArray()).toBe(es);
-        
+
     });
 
     it("roundtrips DateTime arrays", () => {
@@ -221,15 +218,15 @@ describe("Angara.InfoSet", () => {
         expect(infoSet1.IsNull).toBeTruthy();
         expect(infoSet.ToNull()).toBe(null);
         expect(infoSet1.ToNull()).toBe(null);
-        
+
     });
 
     it("Unmarshal data", () => {
         var data = a.InfoSet.EmptyMap
-                .AddInt("i", 20)
-                .AddString("s", "Hello!")
-                .AddBool("b", true);
-        var unmarshalData = a.InfoSet.Unmarshal({":someData" : a.InfoSet.Marshal(data) });
+            .AddInt("i", 20)
+            .AddString("s", "Hello!")
+            .AddBool("b", true);
+        var unmarshalData = a.InfoSet.Unmarshal({ ":someData": a.InfoSet.Marshal(data) });
         expect(unmarshalData.IsArtefact).toBeTruthy();
         expect(unmarshalData.ToArtefact()).toEqual({ TypeId: "someData", Content: data });
 
@@ -241,9 +238,9 @@ describe("Angara.InfoSet", () => {
             .AddInt("i", 10)
             .AddString("s", "Bye!")
             .AddBool("b", false);
-        var unmarshalData2 = a.InfoSet.Unmarshal({ 
-            ":someData1": a.InfoSet.Marshal(data), 
-            "s:someData2": a.InfoSet.Marshal(data1) 
+        var unmarshalData2 = a.InfoSet.Unmarshal({
+            ":someData1": a.InfoSet.Marshal(data),
+            "s:someData2": a.InfoSet.Marshal(data1)
         });
         expect(unmarshalData2.IsMap).toBeTruthy();
         expect(unmarshalData2.ToMap()[""].ToArtefact()).toEqual({ TypeId: "someData1", Content: data });

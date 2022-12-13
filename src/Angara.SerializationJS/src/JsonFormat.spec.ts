@@ -1,9 +1,8 @@
-﻿/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../../dist/Angara.Serialization.d.ts"/>
+﻿import { Angara } from "./Angara.InfoSet";
 
 describe("Angara.InfoSet", () => {
 
-    it("parses and deserializes object arrays",() => {
+    it("parses and deserializes object arrays", () => {
         var json = {
             ":object array": [
                 null,
@@ -12,11 +11,11 @@ describe("Angara.InfoSet", () => {
                     ":record": {
                         "Age:int": 25,
                         "Dogs": [
-                        "Alba",
-                        "Eva" ],
-                    "Name": "Adam"
-                }
-            }]
+                            "Alba",
+                            "Eva"],
+                        "Name": "Adam"
+                    }
+                }]
         }
         var infoSet = Angara.InfoSet.Unmarshal(json);
         var a = infoSet.ToArtefact();
@@ -48,9 +47,9 @@ describe("Angara.InfoSet", () => {
     it("generates server-compatible JSON for seq ", () => {
         var da = Angara.InfoSet.Seq([Angara.InfoSet.Int(10), Angara.InfoSet.String("hello"), Angara.InfoSet.DoubleArray([10.3, 5])]);
         var c_json = Angara.InfoSet.Marshal(da);
-        var s_json = [ { ":int":10 } , 
-                       "hello",
-                       { ":double array":"mpmZmZmZJEAAAAAAAAAUQA==" } ];
+        var s_json = [{ ":int": 10 },
+            "hello",
+        { ":double array": "mpmZmZmZJEAAAAAAAAAUQA==" }];
         expect(JSON.stringify(c_json)).toEqual(JSON.stringify(s_json));
     });
 

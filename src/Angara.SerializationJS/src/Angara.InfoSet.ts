@@ -1,4 +1,5 @@
-﻿module Angara {
+﻿import {decode, encode} from 'typescript-base64-arraybuffer';
+export namespace Angara {
 
     export class Guid {
         private id: string;
@@ -53,19 +54,11 @@
         }
 
         public static Decode(base64: string) {
-            var s = window.atob(base64); // More optimal is to work directly with Uint8Array without intermediate string
-            var result = new Uint8Array(s.length);
-            for (var i = 0; i < result.byteLength; i++)
-                result[i] = s.charCodeAt(i);
-            return result;
+            return decode(base64);
         }
 
         public static Encode(arr: { buffer: ArrayBuffer }) {
-            var view = new DataView(arr.buffer);
-            var binary = '';
-            for (var i = 0; i < view.byteLength; i++)
-                binary += String.fromCharCode(view.getUint8(i));
-            return window.btoa(binary); // More optimal is to work directly with Uint8Array without intermediate string
+            return encode(arr.buffer);
         }
     }
 
@@ -130,12 +123,12 @@
             return <string>this.v;
         }
 
-        public ToRaw() {
+        public ToRaw(): any {
             switch (this.t) {
                 case InfoSetType.Artefact:
                     throw new Error("Cannot convert InfoSet with Artefacts to raw representation because it loses type information");
                 case InfoSetType.Map:
-                    var result = {};
+                    var result: { [_: string]: any } = {};
                     var map = <{ [p: string]: InfoSet }>(this.v);
                     for (var p in map)
                         result[p] = map[p].ToRaw();
@@ -250,7 +243,7 @@
                 return [s.replace("::", ":"), null];
         }
 
-        private static Encode(i: InfoSet): [any, string | null] {
+        private static Encode(i: InfoSet | null): [any, string | null] {
             if (i == null || i.IsNull)
                 return [null, null];
             if (i.IsBool)
@@ -292,7 +285,7 @@
                 var seq = <InfoSet[]>i.v;
                 return [seq.map(i => InfoSet.Marshal(i)), null]
             } else if (i.IsMap) {
-                var res = {};
+                var res: { [_: string]: any } = {};
                 for (var p in i.v) {
                     var encoded = InfoSet.Encode(i.v[p]);
                     var key = InfoSet.EncodeNameAndType(p, encoded[1]);
@@ -303,12 +296,12 @@
             throw new Error("Incompatible input InfoSet.");
         }
 
-        public static Marshal(i: InfoSet) {
+        public static Marshal(i: InfoSet | null) {
             var encoded = InfoSet.Encode(i);
             if (encoded[1] == null)
                 return encoded[0];
             else {
-                var r = {};
+                var r: { [_: string]: any } = {};
                 r[InfoSet.EncodeNameAndType("", encoded[1])] = encoded[0];
                 return r;
             }
@@ -447,7 +440,7 @@
             }
             if (is.IsMap) {
                 var map = is.ToMap();
-                var obj = {};
+                var obj: { [_: string]: any } = {};
                 for (var key in map) {
                     obj[key] = InfoSet.Deserialize(map[key]);
                 }
