@@ -1,7 +1,0 @@
-﻿      return {
-          "Guid" : Angara.Guid, 
-          "InfoSetType" : Angara.InfoSetType,
-          "InfoSet" : Angara.InfoSet,
-          "TypeIdPropertyName" : Angara.TypeIdPropertyName };
-   }); // end of the factory function
-}(window));
