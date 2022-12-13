@@ -47,29 +47,29 @@
     }
 
     class Base64 {
-        private static b64ToUint6(nChr : number) {
+        private static b64ToUint6(nChr: number) {
             return nChr > 64 && nChr < 91 ? nChr - 65 : nChr > 96 && nChr < 123 ? nChr - 71 : nChr > 47 && nChr < 58 ?
                 nChr + 4 : nChr === 43 ? 62 : nChr === 47 ? 63 : 0;
         }
 
-        public static Decode(base64 : string) {
+        public static Decode(base64: string) {
             var s = window.atob(base64); // More optimal is to work directly with Uint8Array without intermediate string
             var result = new Uint8Array(s.length);
-            for(var i = 0;i<result.byteLength;i++)
+            for (var i = 0; i < result.byteLength; i++)
                 result[i] = s.charCodeAt(i);
             return result;
         }
 
-        public static Encode(arr : { buffer : ArrayBuffer }) {
+        public static Encode(arr: { buffer: ArrayBuffer }) {
             var view = new DataView(arr.buffer);
             var binary = '';
-            for (var i = 0; i < view.byteLength; i++) 
+            for (var i = 0; i < view.byteLength; i++)
                 binary += String.fromCharCode(view.getUint8(i));
             return window.btoa(binary); // More optimal is to work directly with Uint8Array without intermediate string
         }
     }
 
-    export var TypeIdPropertyName = "__angara_typeId";  
+    export var TypeIdPropertyName = "__angara_typeId";
 
     export class InfoSet {
         private t: InfoSetType;
@@ -78,7 +78,7 @@
         constructor(t: InfoSetType, v: any) {
             this.t = t;
             this.v = v;
-        }  
+        }
 
         public get Type() { return this.t; }
 
@@ -204,7 +204,7 @@
         }
 
         public get IsBool() { return this.t == InfoSetType.Bool; }
-        public get IsInt(   ) { return this.t == InfoSetType.Int; }
+        public get IsInt() { return this.t == InfoSetType.Int; }
         public get IsDouble() { return this.t == InfoSetType.Double; }
         public get IsString() { return this.t == InfoSetType.String; }
         public get IsRaw() { return this.t == InfoSetType.Raw; }
@@ -237,20 +237,20 @@
         public static DateTimeArray(d: Array<Date>) { return new InfoSet(InfoSetType.DateTimeArray, d); }
         public static Seq(s: Array<InfoSet>) { return new InfoSet(InfoSetType.Seq, s); }
 
-        private static EncodeNameAndType(n: string, t: string) {
+        private static EncodeNameAndType(n: string, t: string | null) {
             n = n.replace(":", "::");
             return t == null ? n : n + ":" + t;
         }
 
-        private static DecodeNameAndType(s: string) {
+        private static DecodeNameAndType(s: string): [string, string | null] {
             var idx = s.lastIndexOf(":");
             if (idx == 0 || idx > 0 && s[idx - 1] != ':')
-                return [s.substr(0, idx).replace("::", ":"), s.substr(idx + 1)];
+                return [s.substring(0, idx).replace("::", ":"), s.substring(idx + 1)];
             else
                 return [s.replace("::", ":"), null];
         }
 
-        private static Encode(i: InfoSet): [any, string] {
+        private static Encode(i: InfoSet): [any, string | null] {
             if (i == null || i.IsNull)
                 return [null, null];
             if (i.IsBool)
@@ -275,11 +275,11 @@
                 var boolarr = <boolean[]>i.v;
                 for (var k = 0; k < boolarr.length; k++)
                     arr[k] = boolarr[k] ? 1 : 0;
-                return [Base64.Encode(typeof i.v == "Int8Array" ? i.v : new Int8Array(arr)), "bool array"];
+                return [Base64.Encode(i.v instanceof Int8Array ? i.v : new Int8Array(arr)), "bool array"];
             } else if (i.IsIntArray)
-                return [Base64.Encode(typeof i.v == "Int32Array" ? i.v : new Int32Array(<number[]>i.v)), "int array"];
+                return [Base64.Encode(i.v instanceof Int32Array ? i.v : new Int32Array(<number[]>i.v)), "int array"];
             else if (i.IsDoubleArray)
-                return [Base64.Encode(typeof i.v == "Float64Array" ? i.v : new Float64Array(<number[]>i.v)), "double array"];
+                return [Base64.Encode(i.v instanceof Float64Array ? i.v : new Float64Array(<number[]>i.v)), "double array"];
             else if (i.IsStringArray) {
                 return [i.v, i.v.length == 0 ? "string array" : null];
             } else if (i.IsDateTimeArray) {
@@ -287,10 +287,10 @@
                 var datearr = <Date[]>i.v;
                 for (var k = 0; k < datearr.length; k++)
                     arr[k] = datearr[k].valueOf();
-                return [Base64.Encode(typeof i.v == "Float64Array" ? i.v : new Float64Array(arr)), "datetime array"];
+                return [Base64.Encode(i.v instanceof Float64Array ? i.v : new Float64Array(arr)), "datetime array"];
             } else if (i.IsSeq) {
                 var seq = <InfoSet[]>i.v;
-                return [seq.map(i => InfoSet.Marshal(i)),null]
+                return [seq.map(i => InfoSet.Marshal(i)), null]
             } else if (i.IsMap) {
                 var res = {};
                 for (var p in i.v) {
@@ -300,6 +300,7 @@
                 }
                 return [res, null]
             }
+            throw new Error("Incompatible input InfoSet.");
         }
 
         public static Marshal(i: InfoSet) {
@@ -317,7 +318,7 @@
             var infoSet = InfoSet.Decode([t, null]);
             if (infoSet.IsMap) {
                 var map = infoSet.ToMap();
-                var names = [];
+                var names: string[] = [];
                 var k = 0;
                 for (var p in map) {
                     names[k] = p;
@@ -342,7 +343,7 @@
             return map;
         }
 
-        private static Decode(t: [any, string]): InfoSet {
+        private static Decode(t: [any, string | null]): InfoSet {
             var json = t[0];
             var typeId = t[1];
             if (json == null)
@@ -355,7 +356,7 @@
                 return InfoSet.Guid(new Guid(json));
             else if (typeId == "int array")
                 return InfoSet.IntArray(new Int32Array(Base64.Decode(json).buffer));
-            else if(typeId == "string array")
+            else if (typeId == "string array")
                 return InfoSet.StringArray(json);
             else if (typeId == "datetime array") {
                 var arrd = new Array<Date>();
@@ -374,7 +375,7 @@
             else if (typeId == "array") {
                 var length = json.length;
                 var a = new Array<InfoSet>(length);
-                for (var i = 0;i<length;i++) 
+                for (var i = 0; i < length; i++)
                     a[i] = InfoSet.Unmarshal(json[i]);
                 return InfoSet.Seq(a);
             } else if (typeId != null) {
@@ -393,8 +394,8 @@
                 return InfoSet.String(<string>json);
             else if (json instanceof Array) {
                 var objs = <Array<any>>json;
-                var allStrings = objs.every(s => typeof(s) === "string");
-                if(allStrings && objs.length > 0)
+                var allStrings = objs.every(s => typeof (s) === "string");
+                if (allStrings && objs.length > 0)
                     return InfoSet.StringArray(<Array<string>>objs);
                 else
                     return InfoSet.Seq(objs.map(i => InfoSet.Unmarshal(i)));
@@ -403,9 +404,8 @@
             } else
                 throw new Error("Unsupported object type " + typeof json);
         }
-        
-        public static Deserialize(is : Angara.InfoSet) : any 
-        {
+
+        public static Deserialize(is: Angara.InfoSet): any {
             if (is.IsNull) {
                 return null;
             }
@@ -468,7 +468,7 @@
                 return objArr;
             }
 
-            throw "Unknown type of InfoSet";            
+            throw "Unknown type of InfoSet";
         }
     }
 }
