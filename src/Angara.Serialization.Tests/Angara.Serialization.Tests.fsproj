@@ -9,6 +9,7 @@
     <Compile Include="Common.fs" />
     <Compile Include="ArtefactSerializerTests.fs" />
     <Compile Include="SerializerLibraryTests.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="fscheck" Version="2.16.5" />

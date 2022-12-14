@@ -7,7 +7,7 @@
     <Company>Microsoft Research</Company>
     <Product>Angara</Product>
     <Copyright>Copyright (c) 2018 Microsoft Corporation</Copyright>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <Version>0.3.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
