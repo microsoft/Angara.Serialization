@@ -13,7 +13,6 @@ let equalSeq<'U when 'U : comparison> (s1 : 'U seq) (s2 : 'U seq) =
 let shouldRoundtrip (i : InfoSet) =
     let json = Json.Marshal(i, None)
     let s = json.ToString(Newtonsoft.Json.Formatting.Indented)
-    printfn "%s" s
     let json' = Newtonsoft.Json.Linq.JToken.Parse(s)
     let i' = Json.Unmarshal(json', None)
     i =! i'
@@ -21,7 +20,6 @@ let shouldRoundtrip (i : InfoSet) =
 let shouldSatisfy (p: InfoSet -> bool) (i : InfoSet) =
     let json = Json.Marshal(i, None)
     let s = json.ToString(Newtonsoft.Json.Formatting.Indented)
-    printfn "%s" s
     let json' = Newtonsoft.Json.Linq.JToken.Parse(s)
     let i' = Json.Unmarshal(json', None)
     Assert.IsTrue(p i')

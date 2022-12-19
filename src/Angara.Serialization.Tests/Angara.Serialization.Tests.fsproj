@@ -5,7 +5,6 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="NUnitRunner.fs" />
     <Compile Include="Common.fs" />
     <Compile Include="ArtefactSerializerTests.fs" />
     <Compile Include="SerializerLibraryTests.fs" />

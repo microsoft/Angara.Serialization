@@ -2,8 +2,7 @@
 open System
 open NUnit.Framework
 open FsUnit
-open FsCheck
-open Swensen.Unquote
+open FsCheck.NUnit
 
 open Common
 open Angara.Serialization
@@ -20,43 +19,43 @@ let shouldSatisfy (lib : ISerializerResolver) (p: obj -> bool) a =
 
 let equald d1 d2 = d1 = d2 || Double.IsNaN(d1) && Double.IsNaN(d2)
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int64 is serialized`` (i : int64) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt64 is serialized`` (i : uint64) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int32 is serialized`` (i : int) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt32 is serialized`` (i : uint32) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int16 is serialized`` (i : int16) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt16 is serialized`` (i : uint16) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Decimal is serialized`` (i : decimal) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Byte is serialized`` (i : byte) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Bool is serialized`` (i : bool) = checkCoreRT i
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``String is serialized`` (s : string) = checkCoreRT s
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``DateTime is serialized`` (d : DateTime) = checkCoreRT d
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Guid is serialized`` (g : System.Guid) = checkCoreRT g
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Double is serialized`` (d : double) = 
     let lib = CoreSerializerResolver.Instance
     let d' = d |> ArtefactSerializer.Serialize lib |> ArtefactSerializer.Deserialize lib :?> double
@@ -75,7 +74,7 @@ let buildCustomLib () =
     lib.Register(Vector2dSerializer())
     SerializerCompositeResolver([ lib; CoreSerializerResolver.Instance ])
 
-[<FsCheck.NUnit.PropertyAttribute(Verbose=true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Custom artefacts are serialized`` (v : Vector2d) = checkRT (buildCustomLib()) v
 
 [<Test; Category("CI")>]
@@ -94,84 +93,84 @@ let ``Tuples of any length are serialized`` () =
 
 // Arrays
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int64[] is serialized`` (i : int64 array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt64[] is serialized`` (i : uint64 array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int[] is serialized`` (i : int array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt[] is serialized`` (i : uint32 array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int16[] is serialized`` (i : int16 array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt16[] is serialized`` (i : uint16 array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``byte[] is serialized`` (i : byte array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``decimal[] is serialized`` (i : decimal array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``string[] is serialized`` (s : string array) = checkCoreRT s
 
-[<FsCheck.NUnit.Property(Verbose=true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Arrays of custom artefacts is serialized`` (i : Vector2d array) = checkRT (buildCustomLib()) i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``bool[] is serialized`` (i : bool array) = checkCoreRT i
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Array of string arrays is serialized`` (a : string array array) = checkCoreRT a
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Array of int arrays is serialized`` (a : int array array) = checkCoreRT a
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Array of string lists is serialized`` (a : string list array) = checkCoreRT a
 
-[<FsCheck.NUnit.Property(Verbose = true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``Array of int lists is serialized`` (a : int list array) = checkCoreRT a
 
 // Lists
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int64 list is serialized`` (i : int64 list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt64 list is serialized`` (i : uint64 list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int list is serialized`` (i : int list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt list is serialized`` (i : uint32 list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``Int16 list is serialized`` (i : int16 list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``UInt16 list is serialized`` (i : uint16 list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``byte list is serialized`` (i : byte list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``decimal list is serialized`` (i : decimal list) = checkCoreRT i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``string list is serialized`` (s : string list) = checkCoreRT s
 
-[<FsCheck.NUnit.Property(Verbose=true); Category("CI")>]
+[<Property; Category("CI")>]
 let ``List of custom artefacts is serialized`` (i : Vector2d array) = checkRT (buildCustomLib()) i
 
-[<FsCheck.NUnit.Property; Category("CI")>]
+[<Property; Category("CI")>]
 let ``bool list is serialized`` (i : bool list) = checkCoreRT i
 
 //[<Test; Category("CI")>]
